@@ -9,3 +9,13 @@ body {
 #root {
   height: 100%;
 }
+
+.rover-photo-container {
+  width: 600px;
+  height: 600px;
+  background-color: black;
+}
+
+.rover-photo-img {
+  width: 100%;
+}

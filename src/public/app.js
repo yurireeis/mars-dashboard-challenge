@@ -16318,6 +16318,30 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
     // TODO: set store using immutability
     // const store = Immutable.Map({ photos: Immutable.List(), cameras: Immutable.List(), rovers: Immutable.List() })
     const store = { photos: [], cameras: [], rovers: [] }
+
+    const getCarouselEl = (cameras) => ({ cameraId, earthDate, imgSrc }, index) => {
+        const photoElsClasses = ["carousel-item", "rover-photo-container"]
+        const captionElsClasses = ["carousel-caption", "d-none", "d-md-block"]
+        const { name: cameraName } = cameras.find(({ id }) => cameraId === id)
+        const carouselEl = document.createElement("div")
+        photoElsClasses.forEach((className) => carouselEl.classList.add(className))
+        if (0 === index) { carouselEl.classList.add("active") }
+        const carouselImgEl = document.createElement("img")
+        carouselImgEl.src = imgSrc
+        carouselImgEl.classList = ["rover-photo-img"]
+        carouselEl.appendChild(carouselImgEl)
+        const carouselCaptionEl = document.createElement("div")
+        captionElsClasses.forEach(className => carouselCaptionEl.classList.add(className))
+        const carouselCaptionCameraEl = document.createElement("h5")
+        carouselCaptionCameraEl.innerText = `FROM: ${cameraName}`
+        const carouselCaptionEarthDateEl = document.createElement("p")
+        carouselCaptionEarthDateEl.innerText = `EARTH DATE: ${earthDate}`
+        carouselCaptionEl.appendChild(carouselCaptionCameraEl)
+        carouselCaptionEl.appendChild(carouselCaptionEarthDateEl)
+        carouselEl.appendChild(carouselCaptionEl)
+        return carouselEl
+    }
+
     const selectRoverEl = document.getElementById('select-rover')
 
     const nextSlideButton = document.getElementById('carousel-control-next-button')
@@ -16336,6 +16360,7 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
 
     selectRoverEl.addEventListener('click', () => {
         const { cameras, rovers, photos } = store
+        const getCarouselElWithCameras = getCarouselEl(cameras)
         const selectorContainerEl = document.getElementById('rover-options-container')
         const { value } = selectorContainerEl
         const selectedRoverId = parseInt(value, 10)
@@ -16368,21 +16393,11 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
         const roverDataEls = [roverNameEl, landingDateEl, launchDateEl, statusEl, cameraNamesEl, photosByCameraEl]
         const roverDetailEls = document.getElementsByClassName("rover-details-item")
         Array.from(roverDetailEls).forEach(el => el.remove())
-        const roverPhotosEls = document.getElementsByClassName("rover-photo")
+        const roverPhotosEls = document.getElementsByClassName("rover-photo-container")
         Array.from(roverPhotosEls).forEach(el => el.remove())
-        const photoElsClasses = ["carousel-item", "rover-photo"]
         const carouselSlidesContainer = document.getElementById("rover-images-carousel")
-        const photosEls = selectedPhotos.map(({ cameraId, name, earthDate, imgSrc }, index) => {
-            const { name: cameraName } = cameras.find(({ id }) => cameraId === id)
-            const carouselEl = document.createElement("div")
-            photoElsClasses.forEach((className) => carouselEl.classList.add(className))
-            if (0 === index) { carouselEl.classList.add("active") }
-            const carouselImgEl = document.createElement("img")
-            carouselImgEl.src = imgSrc
-            carouselImgEl.classList = ["d-block", "w-100"]
-            carouselEl.appendChild(carouselImgEl)
-            return carouselEl
-        })
+        const photosEls = selectedPhotos.map(getCarouselElWithCameras)
+
         return [roverInfoContainerEl.replaceChildren(...roverDataEls), carouselSlidesContainer.replaceChildren(...photosEls)]
     })
 
