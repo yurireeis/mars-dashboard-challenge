@@ -22,6 +22,11 @@ body {
   text-transform: capitalize;
 }
 
+#rover-info-container {
+  color: rgb(131, 129, 129);
+  text-align: justify;
+}
+
 .rover-photo-container {
   height: 600px;
   width: 600px;
