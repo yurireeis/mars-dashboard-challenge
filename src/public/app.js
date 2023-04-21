@@ -16308,10 +16308,20 @@ const activateNextOne = ({ activeSlide }) => {
     return { previousActiveSlide: activeSlide, nextActiveSlide: nextSlideEl }
 }
 
-const activatePrevOne = ({ allSlides, activeSlide }) => {
+const activatePrevOne = ({ activeSlide }) => {
     const { previousElementSibling: prevSlideEl } = activeSlide
     if (prevSlideEl) { prevSlideEl.classList.add("active") }
     return { previousActiveSlide: activeSlide, nextActiveSlide: prevSlideEl }
+}
+
+const getElementsAdjustedByCheckboxStatuses = ({ id, checked }) => {
+    const shownElementId = id.replace('display-check', 'field-shown')
+    const hiddenElementId = id.replace('display-check', 'field-hidden')
+    const shownEl = document.getElementById(shownElementId)
+    const hiddenEl = document.getElementById(hiddenElementId)
+    shownEl.style.display = checked ? 'inline' : 'none'
+    hiddenEl.style.display = checked ? 'none' : 'inline'
+    return [shownEl, hiddenEl]
 }
 
 (() => {
@@ -16343,8 +16353,13 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
     }
 
     const selectRoverEl = document.getElementById('select-rover')
-
     const nextSlideButton = document.getElementById('carousel-control-next-button')
+    const displayInfoCheckEls = document.getElementsByClassName('display-info-check')
+
+    Array.from(displayInfoCheckEls).forEach((el) => el.addEventListener('click', (ev) => {
+        const { currentTarget: { id, checked } = {} } = ev || {}
+        return getElementsAdjustedByCheckboxStatuses({ id, checked })
+    }))
 
     nextSlideButton.addEventListener('click', () => getAllElementsAndSelectedOne()
         .then(activateNextOne)
@@ -16380,17 +16395,28 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
         const roverInfoContainerEl = document.getElementById('rover-info-container')
         // const roverNameEl = document.createElement("div")
         // roverNameEl.innerText = `Name: ${selectedRover.name}`
-        const landingDateEl = document.createElement("div")
-        const landingText = new Date(selectedRover.landingDate).toDateString()
-        landingDateEl.innerText = `Landing: ${landingText}`
         const launchDateEl = document.createElement("div")
         const launchText = new Date(selectedRover.launchDate).toDateString()
-        launchDateEl.innerText = `Launch: ${launchText}`
+        const landingDateEl = document.createElement("div")
+        launchDateEl.innerHTML = `
+            Launch: <span id=\"launch-date-field-shown\">${launchText}</span
+            ><span id=\"launch-date-field-hidden\">&lt;hidden&gt;</span>
+        `
+        const landingText = new Date(selectedRover.landingDate).toDateString()
+        landingDateEl.innerHTML = `
+            Landing: <span id=\"landing-date-field-shown\">${landingText}</span
+            ><span id=\"landing-date-field-hidden\">&lt;hidden&gt;</span>
+        `
         const cameraNamesEl = document.createElement("div")
-        cameraNamesEl.innerText = `Cameras: ${cameraNames}`
+        cameraNamesEl.innerHTML = `
+            Cameras: <span id=\"cameras-field-shown\">${cameraNames}</span
+            ><span id=\"cameras-field-hidden\">&lt;hidden&gt;</span>
+        `
         const statusEl = document.createElement("div")
-        statusEl.innerText = `Status: ${selectedRover.status}`
-        statusEl.classList.add("capitalize")
+        statusEl.innerHTML = `
+            Status: <span class="capitalize" id="status-field-shown">${selectedRover.status}</span
+            ><span id="status-field-hidden">&lt;hidden&gt;</span>
+        `
         // const photosByCameraEl = document.createElement("div")
         // photosByCameraEl.innerText = `Photos: ${photosByCamera}`
         const roverDataEls = [launchDateEl, landingDateEl, statusEl, cameraNamesEl]
@@ -16400,8 +16426,12 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
         Array.from(roverPhotosEls).forEach(el => el.remove())
         const carouselSlidesContainer = document.getElementById("rover-images-carousel")
         const photosEls = selectedPhotos.map(getCarouselElWithCameras)
+        roverInfoContainerEl.replaceChildren(...roverDataEls)
+        carouselSlidesContainer.replaceChildren(...photosEls)
+        const checkboxStatuses = document.getElementsByClassName('display-info-check')
+        Array.from(checkboxStatuses).forEach(getElementsAdjustedByCheckboxStatuses)
 
-        return [roverInfoContainerEl.replaceChildren(...roverDataEls), carouselSlidesContainer.replaceChildren(...photosEls)]
+        return [roverInfoContainerEl, carouselSlidesContainer]
     })
 
     getImagesFromNasaMock({})

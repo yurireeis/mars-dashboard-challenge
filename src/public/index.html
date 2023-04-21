@@ -88,16 +88,21 @@
                   <button
                     class="btn btn-secondary btn-sm dropdown-toggle"
                     type="button"
+                    id="clickable-dropdown"
                     data-bs-toggle="dropdown"
+                    data-bs-auto-close="outside"
                     aria-expanded="false"
                   >
                     infos
                   </button>
-                  <ul class="dropdown-menu">
+                  <ul
+                    class="dropdown-menu"
+                    aria-labelledby="clickable-dropdown"
+                  >
                     <li>
                       <a class="dropdown-item">
                         <input
-                          class="form-check-input"
+                          class="form-check-input display-info-check"
                           type="checkbox"
                           id="launch-date-display-check"
                           checked
@@ -114,7 +119,7 @@
                     <li>
                       <a class="dropdown-item">
                         <input
-                          class="form-check-input"
+                          class="form-check-input display-info-check"
                           type="checkbox"
                           id="landing-date-display-check"
                           checked
@@ -131,7 +136,7 @@
                     <li>
                       <a class="dropdown-item">
                         <input
-                          class="form-check-input"
+                          class="form-check-input display-info-check"
                           type="checkbox"
                           id="status-display-check"
                           checked
@@ -148,7 +153,7 @@
                     <li>
                       <a class="dropdown-item">
                         <input
-                          class="form-check-input"
+                          class="form-check-input display-info-check"
                           type="checkbox"
                           id="cameras-display-check"
                           checked
@@ -168,10 +173,22 @@
                 <!-- TODO: options goes here -->
 
                 <div id="rover-info-container">
-                  <div>Launch: N/A</div>
-                  <div>Landing: N/A</div>
-                  <div class="capitalize">Status: N/A</div>
-                  <div>Cameras: N/A</div>
+                  <div>
+                    Launch: <span id="launch-date-field-shown">N/A</span
+                    ><span id="launch-date-field-hidden">&lt;hidden&gt;</span>
+                  </div>
+                  <div>
+                    Landing: <span id="landing-date-field-shown">N/A</span
+                    ><span id="landing-date-field-hidden">&lt;hidden&gt;</span>
+                  </div>
+                  <div>
+                    Status: <span class="capitalize" id="status-field-shown">N/A</span
+                    ><span id="status-field-hidden">&lt;hidden&gt;</span>
+                  </div>
+                  <div>
+                    Cameras: <span id="cameras-field-shown">N/A</span
+                    ><span id="cameras-field-hidden">&lt;hidden&gt;</span>
+                  </div>
                 </div>
               </div>
             </div>

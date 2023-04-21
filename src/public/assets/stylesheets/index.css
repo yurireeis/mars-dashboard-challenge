@@ -27,6 +27,38 @@ body {
   text-align: justify;
 }
 
+#launch-date-field-shown {
+  display: inline;
+}
+
+#landing-date-field-shown {
+  display: inline;
+}
+
+#status-field-shown {
+  display: inline;
+}
+
+#cameras-field-shown {
+  display: inline;
+}
+
+#launch-date-field-hidden {
+  display: none;
+}
+
+#landing-date-field-hidden {
+  display: none;
+}
+
+#status-field-hidden {
+  display: none;
+}
+
+#cameras-field-hidden {
+  display: none;
+}
+
 .rover-photo-container {
   height: 600px;
   width: 600px;
@@ -35,4 +67,8 @@ body {
 
 .rover-photo-img {
   object-fit: cover;
+}
+
+.display-info-check {
+  cursor: pointer;
 }
