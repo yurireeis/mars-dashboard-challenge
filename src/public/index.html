@@ -13,95 +13,154 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="assets/stylesheets/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <div id="root">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <!-- TODO: rover selector column -->
+    <div class="container full-height">
+      <div class="row justify-content-center align-items-center full-height">
+        <div class="col-8">
+          <div class="row">
+            <div class="col-12">
+              <!-- TODO: rover selector column -->
 
-            <div class="input-group">
-              <select
-                class="form-select"
-                aria-label="select rover here"
-                id="rover-options-container"
-              ></select>
-              <button
-                id="select-rover"
-                class="btn btn-outline-secondary"
-                type="button"
+              <div class="input-group">
+                <label class="input-group-text" for="rover-options-container"
+                  >Rovers</label
+                >
+                <select
+                  class="form-select"
+                  aria-label="select rover here"
+                  id="rover-options-container"
+                ></select>
+                <button
+                  id="select-rover"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  GO!
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12" style="display: flex; align-items: center">
+              <div
+                style="
+                  position: relative;
+                  padding: 15px;
+                  margin: 20px 0 5px 0;
+                  width: 100%;
+                  border: 1px solid;
+                "
               >
-                GO!
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="row my-4">
-          <div
-            class="col-12"
-            style="display: flex; justify-content: center; align-items: center"
-          >
-            <div id="rover-info-container"></div>
-            <!-- TODO: selected rover info container -->
-            <div class="rover-details-item">NAME: Not available</div>
-            <div class="rover-details-item">LANDING DATE: Not available</div>
-            <div class="rover-details-item">LAUNCH DATE: Not available</div>
-            <div class="rover-details-item">STATUS: Not available</div>
-            <div class="rover-details-item">CAMERAS: Not available</div>
-            <div class="rover-details-item">
-              PHOTOS BY CAMERA: Not available
-            </div>
-          </div>
-          <div
-            class="col-12"
-            style="display: flex; justify-content: center; align-items: center"
-          >
-            <div class="carousel slide">
-              <div id="rover-images-carousel" class="carousel-inner">
-                <!-- TODO: should have multiple of these ones -->
-                <div class="rover-photo-container carousel-item active">
-                  <img
-                    class="rover-photo-img"
-                    src="https://html.com/wp-content/uploads/flamingo.webp"
-                  />
+                <div
+                  style="
+                    position: absolute;
+                    top: -14px;
+                    left: 7px;
+                    text-transform: uppercase;
+                    background-color: white;
+                    padding: 2px 8px;
+                    font-weight: 800;
+                  "
+                >
+                  about the rover
                 </div>
-
-                <div class="rover-photo-container carousel-item">
-                  <img
-                    class="rover-photo-img"
-                    src="https://www.copahost.com/blog/wp-content/uploads/2019/07/imgsize2.png"
-                  />
+                <div id="rover-info-container">
+                  <div>Launch: Fri Nov 25 2011</div>
+                  <div>Landing: Sun Aug 05 2012</div>
+                  <div class="capitalize">Status: active</div>
+                  <div>
+                    Cameras: Front Hazard Avoidance Camera (FHAZ), Rear Hazard
+                    Avoidance Camera (RHAZ), Mast Camera (MAST), Chemistry and
+                    Camera Complex (CHEMCAM), Navigation Camera (NAVCAM)
+                  </div>
                 </div>
               </div>
+            </div>
+            <div class="col-12">
+              <div
+                style="
+                  text-transform: uppercase;
+                  background-color: white;
+                  font-weight: 800;
+                  padding: 0 0 5px 15px;
+                  border-bottom: 1px solid;
+                "
+              >
+                Photos
+              </div>
+            </div>
+            <div
+              class="col-12"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <div
+                class="carousel slide"
+                style="
+                  width: 100%;
+                  background-color: black;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <div
+                  id="rover-images-carousel"
+                  class="carousel-inner rover-photo-container"
+                >
+                  <div class="carousel-item rover-photo-item active">
+                    <img
+                      class="rover-photo-img"
+                      src="https://html.com/wp-content/uploads/flamingo.webp"
+                    />
+                  </div>
 
-              <button
-                id="carousel-control-prev-button"
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#rover-images-carousel"
-                data-bs-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button
-                id="carousel-control-next-button"
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#rover-images-carousel"
-                data-bs-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
-                <span class="visually-hidden">Next</span>
-              </button>
+                  <div class="carousel-item rover-photo-item">
+                    <img
+                      class="rover-photo-img"
+                      src="https://www.copahost.com/blog/wp-content/uploads/2019/07/imgsize2.png"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  id="carousel-control-prev-button"
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#rover-images-carousel"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button
+                  id="carousel-control-next-button"
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#rover-images-carousel"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

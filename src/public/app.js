@@ -16378,22 +16378,25 @@ const activatePrevOne = ({ allSlides, activeSlide }) => {
         const selectedRover = rovers.find(({ id }) => selectedRoverId === id)
         const selectedPhotos = photos.filter(({ roverId }) => selectedRoverId === roverId)
         const roverInfoContainerEl = document.getElementById('rover-info-container')
-        const roverNameEl = document.createElement("div")
-        roverNameEl.innerText = `NAME: ${selectedRover.name}`
+        // const roverNameEl = document.createElement("div")
+        // roverNameEl.innerText = `Name: ${selectedRover.name}`
         const landingDateEl = document.createElement("div")
-        landingDateEl.innerText = `LANDING DATE: ${selectedRover.landingDate}`
+        const landingText = new Date(selectedRover.landingDate).toDateString()
+        landingDateEl.innerText = `Landing: ${landingText}`
         const launchDateEl = document.createElement("div")
-        launchDateEl.innerText = `LAUNCH DATE: ${selectedRover.launchDate}`
+        const launchText = new Date(selectedRover.launchDate).toDateString()
+        launchDateEl.innerText = `Launch: ${launchText}`
         const cameraNamesEl = document.createElement("div")
-        cameraNamesEl.innerText = `CAMERAS: ${cameraNames}`
+        cameraNamesEl.innerText = `Cameras: ${cameraNames}`
         const statusEl = document.createElement("div")
-        statusEl.innerText = `STATUS: ${selectedRover.status}`
-        const photosByCameraEl = document.createElement("div")
-        photosByCameraEl.innerText = `PHOTOS BY CAMERA: ${photosByCamera}`
-        const roverDataEls = [roverNameEl, landingDateEl, launchDateEl, statusEl, cameraNamesEl, photosByCameraEl]
+        statusEl.innerText = `Status: ${selectedRover.status}`
+        statusEl.classList.add("capitalize")
+        // const photosByCameraEl = document.createElement("div")
+        // photosByCameraEl.innerText = `Photos: ${photosByCamera}`
+        const roverDataEls = [launchDateEl, landingDateEl, statusEl, cameraNamesEl]
         const roverDetailEls = document.getElementsByClassName("rover-details-item")
         Array.from(roverDetailEls).forEach(el => el.remove())
-        const roverPhotosEls = document.getElementsByClassName("rover-photo-container")
+        const roverPhotosEls = document.getElementsByClassName("rover-photo-item")
         Array.from(roverPhotosEls).forEach(el => el.remove())
         const carouselSlidesContainer = document.getElementById("rover-images-carousel")
         const photosEls = selectedPhotos.map(getCarouselElWithCameras)
