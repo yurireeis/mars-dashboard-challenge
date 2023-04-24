@@ -72,3 +72,57 @@ body {
 .display-info-check {
   cursor: pointer;
 }
+
+/* xs for bootstrap */
+@media (min-width: 0px) {
+  .rover-photo-container {
+    height: 350px;
+    width: 350px;
+    background-color: black;
+  }
+}
+
+/* sm for bootstrap */
+@media (min-width: 576px) {
+  .rover-photo-container {
+    height: 400px;
+    width: 400px;
+    background-color: black;
+  }
+}
+
+/* md for bootstrap */
+@media (min-width: 768px) {
+  .rover-photo-container {
+    height: 600px;
+    width: 600px;
+    background-color: black;
+  }
+}
+
+/* lg for bootstrap */
+@media (min-width: 992px) {
+  .rover-photo-container {
+    height: 700px;
+    width: 700px;
+    background-color: black;
+  }
+}
+
+/* xl for bootstrap */
+@media (min-width: 1200px) {
+  .rover-photo-container {
+    height: 800px;
+    width: 800px;
+    background-color: black;
+  }
+}
+
+/* xxl for bootstrap */
+@media (min-width: 1400px) {
+  .rover-photo-container {
+    height: 600px;
+    width: 600px;
+    background-color: black;
+  }
+}
