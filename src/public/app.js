@@ -1,3 +1,6 @@
+// TODO: implement express server to return expected response
+// TODO: implement ImmutableJS logic to store the data
+
 const getImagesFromNasaMock = async ({ baseUrl, key }) => Promise.resolve({
     "photos": [
         {
