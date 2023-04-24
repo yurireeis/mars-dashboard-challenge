@@ -1,27 +1,29 @@
-require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
-const fetch = require('node-fetch')
 const path = require('path')
-
 const app = express()
 const port = 3000
+const cors = require('cors')
+const { getPhotos, getRovers } = require('./services/nasa.service.js')
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use('/', express.static(path.join(__dirname, '../public')))
 
-// your API calls
-
-// example API call
-app.get('/apod', async (req, res) => {
+app.get('/photos', async (req, res) => {
     try {
-        let image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
-            .then(res => res.json())
-        res.send({ image })
+        const rovers = await getRovers()
+        const roverNames = rovers.map(({ name }) => name && name.toLowerCase() || '').filter(Boolean)
+        const roverPromises = roverNames.map(roverName => getPhotos({ roverName }))
+        const allRoverPhotos = await Promise.all(roverPromises)
+        res.status(200)
+        return res.send(allRoverPhotos.flat())
     } catch (err) {
-        console.log('error:', err);
+        console.log(err)
+        res.status(400)
+        return res.send({ message: 'some error happened' })
     }
 })
 
