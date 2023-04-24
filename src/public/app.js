@@ -1,6 +1,3 @@
-// TODO: implement ImmutableJS logic to store the data
-// TODO: implement loading behavior
-
 const getImagesFromNasa = async () => {
     const requestOptions = {
         method: 'GET',
@@ -81,7 +78,7 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
 (() => {
     // TODO: set store using immutability
     // const store = Immutable.Map({ photos: Immutable.List(), cameras: Immutable.List(), rovers: Immutable.List() })
-    const store = { photos: [], cameras: [], rovers: [] }
+    const store = Immutable.Map({ photos: [], cameras: [], rovers: [] })
 
     const getCarouselEl = (cameras) => ({ cameraId, earthDate, imgSrc }, index) => {
         const photoElsClasses = ["carousel-item", "rover-photo-container"]
@@ -199,18 +196,10 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
     getImagesFromNasa()
         .then(getPhotosCamerasAndRovers)
         .then(({ photos, cameras, rovers }) => {
-            // TODO:here we should update immutable object to have a new version
-            // TODO: use ImmutableJS
-            // const photosState = store.get("photos")
-            // const newPhotosState = photosState.merge(photos)
-            // const camerasState = store.get("cameras")
-            // const newCamerasState = camerasState.merge(cameras)
-            // const roversState = store.get("rovers")
-            // const newRoversState = roversState.merge(rovers)
-            return Object.assign(store, { cameras, photos, rovers })
+            const newStore = store.merge({ photos, cameras, rovers })
+            return { rovers: newStore.get('rovers') }
         })
         .then(({ rovers = [] }) => {
-            // TODO: get data from store
             const selectorContainerEl = document.getElementById('rover-options-container')
             const roversOptEls = rovers.map(({ id, name }, index) => {
                 const optionEl = document.createElement("option")
