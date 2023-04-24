@@ -29,7 +29,7 @@
             <div class="col-12">
               <!-- TODO: rover selector column -->
 
-              <div class="input-group">
+              <div class="input-group" style="position: relative;">
                 <label class="input-group-text" for="rover-options-container"
                   >Rovers</label
                 >
@@ -45,6 +45,20 @@
                 >
                   GO!
                 </button>
+                <div
+                id="page-loader"
+                class="row justify-content-center align-items-center"
+                style="position: absolute; left: 75px; top: 8px; z-index: 1; width: 300px"
+              >
+                <div class="col-12">
+                  <div style="display: flex; align-items: center;width: 100%;">
+                    <div>
+                      <div class="spinner-border spinner-border-sm" role="status"></div>
+                    </div>
+                    <span class="sr-only" style="font-size: 10px; font-weight: 800; padding-left: 10px; text-transform: uppercase;">loading...</span>
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -182,7 +196,8 @@
                     ><span id="landing-date-field-hidden">&lt;hidden&gt;</span>
                   </div>
                   <div>
-                    Status: <span class="capitalize" id="status-field-shown">N/A</span
+                    Status:
+                    <span class="capitalize" id="status-field-shown">N/A</span
                     ><span id="status-field-hidden">&lt;hidden&gt;</span>
                   </div>
                   <div>

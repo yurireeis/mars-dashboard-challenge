@@ -68,6 +68,16 @@ const getElementsAdjustedByCheckboxStatuses = ({ id, checked }) => {
     return [shownEl, hiddenEl]
 }
 
+const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoading }) => {
+    const loader = document.getElementById(loaderId)
+    const button = document.getElementById(goButtonId)
+    const roverSelector = document.getElementById(roverSelectorId)
+    loader.style.display = isLoading ? 'block' : 'none'
+    button.disabled = isLoading
+    roverSelector.disabled = isLoading
+    return { isLoading }
+}
+
 (() => {
     // TODO: set store using immutability
     // const store = Immutable.Map({ photos: Immutable.List(), cameras: Immutable.List(), rovers: Immutable.List() })
@@ -178,6 +188,14 @@ const getElementsAdjustedByCheckboxStatuses = ({ id, checked }) => {
         return [roverInfoContainerEl, carouselSlidesContainer]
     })
 
+    const loaderId = 'page-loader'
+    const goButtonId = 'select-rover'
+    const roverSelectorId = 'rover-options-container'
+
+    const loadingState = setLoadingState({ loaderId, goButtonId, roverSelectorId })
+
+    loadingState({ isLoading: true })
+
     getImagesFromNasa()
         .then(getPhotosCamerasAndRovers)
         .then(({ photos, cameras, rovers }) => {
@@ -203,4 +221,5 @@ const getElementsAdjustedByCheckboxStatuses = ({ id, checked }) => {
             })
             return selectorContainerEl.replaceChildren(...roversOptEls)
         })
-})();
+        .finally(() => loadingState({ isLoading: false }))
+})()
