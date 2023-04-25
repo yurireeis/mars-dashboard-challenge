@@ -75,34 +75,31 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
     return { isLoading }
 }
 
-(() => {
-    // TODO: set store using immutability
-    // const store = Immutable.Map({ photos: Immutable.List(), cameras: Immutable.List(), rovers: Immutable.List() })
-    const store = Immutable.Map({ photos: [], cameras: [], rovers: [] })
+const getCarouselEl = (cameras) => ({ cameraId, earthDate, imgSrc }, index) => {
+    const photoElsClasses = ["carousel-item", "rover-photo-container"]
+    const captionElsClasses = ["carousel-caption", "d-none", "d-md-block"]
+    const { name: cameraName } = cameras.find(({ id }) => cameraId === id)
+    const carouselEl = document.createElement("div")
+    photoElsClasses.forEach((className) => carouselEl.classList.add(className))
+    if (0 === index) { carouselEl.classList.add("active") }
+    const carouselImgEl = document.createElement("img")
+    carouselImgEl.src = imgSrc
+    carouselImgEl.classList = ["rover-photo-img"]
+    carouselEl.appendChild(carouselImgEl)
+    const carouselCaptionEl = document.createElement("div")
+    captionElsClasses.forEach(className => carouselCaptionEl.classList.add(className))
+    const carouselCaptionCameraEl = document.createElement("h5")
+    carouselCaptionCameraEl.innerText = `FROM: ${cameraName}`
+    const carouselCaptionEarthDateEl = document.createElement("p")
+    carouselCaptionEarthDateEl.innerText = `EARTH DATE: ${earthDate}`
+    carouselCaptionEl.appendChild(carouselCaptionCameraEl)
+    carouselCaptionEl.appendChild(carouselCaptionEarthDateEl)
+    carouselEl.appendChild(carouselCaptionEl)
+    return carouselEl
+}
 
-    const getCarouselEl = (cameras) => ({ cameraId, earthDate, imgSrc }, index) => {
-        const photoElsClasses = ["carousel-item", "rover-photo-container"]
-        const captionElsClasses = ["carousel-caption", "d-none", "d-md-block"]
-        const { name: cameraName } = cameras.find(({ id }) => cameraId === id)
-        const carouselEl = document.createElement("div")
-        photoElsClasses.forEach((className) => carouselEl.classList.add(className))
-        if (0 === index) { carouselEl.classList.add("active") }
-        const carouselImgEl = document.createElement("img")
-        carouselImgEl.src = imgSrc
-        carouselImgEl.classList = ["rover-photo-img"]
-        carouselEl.appendChild(carouselImgEl)
-        const carouselCaptionEl = document.createElement("div")
-        captionElsClasses.forEach(className => carouselCaptionEl.classList.add(className))
-        const carouselCaptionCameraEl = document.createElement("h5")
-        carouselCaptionCameraEl.innerText = `FROM: ${cameraName}`
-        const carouselCaptionEarthDateEl = document.createElement("p")
-        carouselCaptionEarthDateEl.innerText = `EARTH DATE: ${earthDate}`
-        carouselCaptionEl.appendChild(carouselCaptionCameraEl)
-        carouselCaptionEl.appendChild(carouselCaptionEarthDateEl)
-        carouselEl.appendChild(carouselCaptionEl)
-        return carouselEl
-    }
-
+const renderContent = (() => {
+    let state = new Immutable.Map({ photos: [], cameras: [], rovers: [] })
     const selectRoverEl = document.getElementById('select-rover')
     const nextSlideButton = document.getElementById('carousel-control-next-button')
     const displayInfoCheckEls = document.getElementsByClassName('display-info-check')
@@ -125,27 +122,17 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
     )
 
     selectRoverEl.addEventListener('click', () => {
-        const { cameras, rovers, photos } = store
+        const { cameras, rovers, photos } = state.toJS()
         const getCarouselElWithCameras = getCarouselEl(cameras)
         const selectorContainerEl = document.getElementById('rover-options-container')
         const { value } = selectorContainerEl
         const selectedRoverId = parseInt(value, 10)
         const selectedCameras = cameras
             .filter(({ roverId }) => selectedRoverId === roverId)
-        const photosByCamera = selectedCameras
-            .reduce((acc, { id, name }) => {
-                const cameraPhotos = photos.filter(({ cameraId }) => id === cameraId)
-                return [...acc, { name, qtd: cameraPhotos.length }]
-            }, [])
-            .sort((a, b) => b.qtd - a.qtd)
-            .map(({ name, qtd }) => (`${name} (${qtd})`))
-            .join(", ")
         const cameraNames = selectedCameras.map(({ name, fullName }) => (`${fullName} (${name})`)).join(", ")
         const selectedRover = rovers.find(({ id }) => selectedRoverId === id)
         const selectedPhotos = photos.filter(({ roverId }) => selectedRoverId === roverId)
         const roverInfoContainerEl = document.getElementById('rover-info-container')
-        // const roverNameEl = document.createElement("div")
-        // roverNameEl.innerText = `Name: ${selectedRover.name}`
         const launchDateEl = document.createElement("div")
         const launchText = new Date(selectedRover.launchDate).toDateString()
         const landingDateEl = document.createElement("div")
@@ -168,8 +155,6 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
             Status: <span class="capitalize" id="status-field-shown">${selectedRover.status}</span
             ><span id="status-field-hidden">&lt;hidden&gt;</span>
         `
-        // const photosByCameraEl = document.createElement("div")
-        // photosByCameraEl.innerText = `Photos: ${photosByCamera}`
         const roverDataEls = [launchDateEl, landingDateEl, statusEl, cameraNamesEl]
         const roverDetailEls = document.getElementsByClassName("rover-details-item")
         Array.from(roverDetailEls).forEach(el => el.remove())
@@ -196,8 +181,8 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
     getImagesFromNasa()
         .then(getPhotosCamerasAndRovers)
         .then(({ photos, cameras, rovers }) => {
-            const newStore = store.merge({ photos, cameras, rovers })
-            return { rovers: newStore.get('rovers') }
+            state = new Immutable.Map({ photos, cameras, rovers })
+            return { rovers: state.get('rovers') }
         })
         .then(({ rovers = [] }) => {
             const selectorContainerEl = document.getElementById('rover-options-container')
@@ -211,4 +196,6 @@ const setLoadingState = ({ loaderId, goButtonId, roverSelectorId }) => ({ isLoad
             return selectorContainerEl.replaceChildren(...roversOptEls)
         })
         .finally(() => loadingState({ isLoading: false }))
-})()
+})
+
+window.addEventListener('DOMContentLoaded', renderContent)
